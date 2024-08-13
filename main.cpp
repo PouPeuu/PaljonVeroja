@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 
 	if (vm.count("generate")) {
 		for (unsigned int i = 0; i < vm["generate"].as<unsigned int>(); ++i) {
-			
+			printf("%s\n", Names::create_name(true).c_str());
 		}
 	}
 

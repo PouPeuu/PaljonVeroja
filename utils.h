@@ -8,9 +8,21 @@
 #include <ctime>
 #include <algorithm>
 #include <unordered_map>
+#include <iterator>
 
 namespace Utils {
-	bool randbool();
+	bool random_bool();
+
+	template <typename Container>
+	typename Container::value_type random_choice(const Container& container) {
+		if (container.empty()) {
+			throw std::out_of_range("Container is empty");
+		}
+
+		std::size_t random_index = std::rand() % container.size();
+
+		return container[random_index];
+	}
 
 	template <typename T>
 	std::vector<T> merge(std::vector<T> v1, std::vector<T> v2) {

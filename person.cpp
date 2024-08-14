@@ -2,6 +2,14 @@
 
 Person::Person(std::string name, double age) : name(name), age(age) {}
 
+std::string Person::get_name() {
+	return this->name;
+}
+
+double Person::get_age() {
+	return this->age;
+}
+
 std::ostream& operator<<(std::ostream &out, const Person &person) {
 	size_t name_length = person.name.size();
 	out.write(reinterpret_cast<const char*>(&name_length), sizeof(name_length));

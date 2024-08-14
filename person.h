@@ -12,14 +12,16 @@ class Person {
 	public:
 		Person(std::string name, double age);
 
+		std::string get_name();
+		double get_age();
+
 		friend std::ostream& operator<<(std::ostream &out, const Person &person);
 		friend std::istream& operator>>(std::istream &in, Person &person);
 };
 
 class Adult : public Person {
-	private:
-		Profession profession;
 	public:
+		Profession profession;
 		Adult(std::string name, double age, Profession profession);
 
 		friend std::ostream& operator<<(std::ostream &out, const Adult &adult);
@@ -27,9 +29,8 @@ class Adult : public Person {
 };
 
 class Child : public Person {
-	private:
-		Hobby hobby;
 	public:
+		Hobby hobby;
 		Child(std::string name, double age, Hobby hobby);
 
 		friend std::ostream& operator<<(std::ostream &out, const Child &child);

@@ -1,10 +1,12 @@
 #include "profession.h"
 
-Profession::Profession(std::string name) {
-	this->name = name;
-}
+Profession::Profession(std::string name) : name(name) {}
 
 Profession::Profession() : Profession("None") {}
+
+std::string Profession::get_name() {
+	return this->name;
+}
 
 std::ostream& operator<<(std::ostream &out, const Profession &profession) {
 	size_t name_length = profession.name.size();

@@ -14,9 +14,12 @@ std::string Names::create_name(bool uppercase_first) {
 std::string Names::create_profession() {
 	std::string profession = "";
 
-	std::vector<std::string> a = {"kenkä", "orpo", "kala", "rölli", "puhelin", "köntys"};
-	std::vector<std::string> b = {"kaivuri", "kalastaja", "mätysteliä", "köntysteliä", "addikti", "CEO"};
+	std::vector<std::string> skill = {"ekspertti", "professionaalinen", "kamala", "epäilyttävä", "luotettava", "hyvätahtoinen", "pyhä", "epäpyhä"};
+	std::vector<std::string> a = {"kenkien", "orpojen", "kalojen", "röllien", "puhelimien", "köntysten", "huumeiden"};
+	std::vector<std::string> b = {"kaivuri", "kalastaja", "mätysteliä", "köntysteliä", "addikti", "CEO", "rapistelia", "rönklääjä", "häpisteliä", "taikuri", "valvoja", "kokeilija", "ahmija"};
 
+	profession += Utils::random_choice(skill);
+	profession += " ";
 	profession += Utils::random_choice(a);
 	profession += " ";
 	profession += Utils::random_choice(b);

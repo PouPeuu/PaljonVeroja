@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 	desc.add_options()
 		("help,h", "produce help message")
 		("generate,g", po::value<unsigned int>(), "generate people")
-		("input,i", po::value<char*>(), "input file");
+		("input,i", po::value<std::string>(), "input file");
 
 	po::variables_map vm;
 	po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -54,15 +54,21 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (vm.count("input")) {
-		std::ifstream infile(vm["input"].as<char*>());
+		std::vector<Child> children;
+
+		std::ifstream infile(vm["input"].as<std::string>());
 		Adult parent1("", 0, Profession(""));
 		Adult parent2("", 0, Profession(""));
 
 		infile >> parent1;
 		infile >> parent2;
 
-		std::cout << parent1.name << " " << parent1.age << " " << parent1.profession.name << std::endl;
-		std::cout << parent2.name << " " << parent2.age << " " << parent2.profession.name << std::endl;
+		printf("------------------\n");
+		printf("Vanhempi 1:\nNimi: %s\nIkä: %lf\nTyö: %s\n", parent1.get_name().c_str(), parent1.get_age(), parent1.profession.get_name().c_str());
+		printf("------------------\n");
+		printf("Vanhempi 2:\nNimi: %s\nIkä: %lf\nTyö: %s\n", parent2.get_name().c_str(), parent2.get_age(), parent2.profession.get_name().c_str());
+
+		
 	}
 
 	return 0;

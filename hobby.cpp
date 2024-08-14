@@ -1,10 +1,12 @@
 #include "hobby.h"
 
-Hobby::Hobby(std::string name) {
-	this->name = name;
-}
+Hobby::Hobby(std::string name) : name(name) {}
 
 Hobby::Hobby() : Hobby("None") {}
+
+std::string Hobby::get_name() {
+	return this->name;
+}
 
 std::ostream& operator<<(std::ostream &out, const Hobby &hobby) {
 	size_t name_length = hobby.name.size();

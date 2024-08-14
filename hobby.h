@@ -10,6 +10,8 @@ class Hobby {
 		Hobby(std::string name);
 		Hobby();
 
+		std::string get_name();
+
 		friend std::ostream& operator<<(std::ostream &out, const Hobby &hobby);
 		friend std::istream& operator>>(std::istream &in, Hobby &hobby);
 };

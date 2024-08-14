@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <iterator>
+#include <fstream>
 
 namespace Utils {
 	bool random_bool();

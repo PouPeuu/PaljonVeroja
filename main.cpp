@@ -1,7 +1,7 @@
 #include <boost/program_options.hpp>
 #include "utils.h"
 #include "names.h"
-#include "person.h"
+#include "family.h"
 
 namespace po = boost::program_options;
 
@@ -39,36 +39,28 @@ int main(int argc, char *argv[]) {
 	if (vm.count("generate")) {
 		std::ofstream outfile("family");
 		if (outfile.is_open()){
-			std::string surname = Names::create_name(true);
-			Adult parent1(Names::create_name(true), 37, Profession(Names::create_profession()));
-			Adult parent2(Names::create_name(true), 37, Profession(Names::create_profession()));
-
-			outfile << parent1 << parent2;
-			for (unsigned int i = 0; i < vm["generate"].as<unsigned int>(); ++i) {
-				Child child(Names::create_name(true), ((double) std::rand() / RAND_MAX) * 17.0, Hobby(Names::create_profession()));
-				outfile << child;
-			}
+			outfile << Family(2, vm["generate"].as<unsigned int>());
 
 			outfile.close();
 		}
 	}
 
 	if (vm.count("input")) {
-		std::vector<Child> children;
-
 		std::ifstream infile(vm["input"].as<std::string>());
-		Adult parent1("", 0, Profession(""));
-		Adult parent2("", 0, Profession(""));
 
-		infile >> parent1;
-		infile >> parent2;
+		if (infile.is_open()){
+			Family family;
+			infile >> family;
+			
+			std::cout << family.printable();
+			std::cout << "\nArvioidut kuukausitulot: " << family.predict_monthly_salary() << std::endl;
+			std::cout << "Arvioidut kuukausimenot: " << family.predict_monthly_cost() << std::endl;
 
-		printf("------------------\n");
-		printf("Vanhempi 1:\nNimi: %s\nIkä: %lf\nTyö: %s\n", parent1.get_name().c_str(), parent1.get_age(), parent1.profession.get_name().c_str());
-		printf("------------------\n");
-		printf("Vanhempi 2:\nNimi: %s\nIkä: %lf\nTyö: %s\n", parent2.get_name().c_str(), parent2.get_age(), parent2.profession.get_name().c_str());
 
-		
+			infile.close();
+		} else {
+			std::cerr << "Failed to open file " << vm["input"].as<std::string>() << std::endl;
+		}
 	}
 
 	return 0;

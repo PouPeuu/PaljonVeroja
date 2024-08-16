@@ -5,7 +5,7 @@
 
 namespace Names {
 	std::string create_name(bool uppercase_first = true);
-	std::string create_profession();
+	std::pair<std::string, double> create_profession();
 }
 
 #endif

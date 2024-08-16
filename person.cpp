@@ -1,5 +1,7 @@
 #include "person.h"
 
+// Person
+
 Person::Person(std::string name, double age) : name(name), age(age) {}
 
 std::string Person::get_name() {
@@ -11,7 +13,7 @@ double Person::get_age() {
 }
 
 std::ostream& operator<<(std::ostream &out, const Person &person) {
-	size_t name_length = person.name.size();
+	unsigned int name_length = person.name.size();
 	out.write(reinterpret_cast<const char*>(&name_length), sizeof(name_length));
 	out.write(person.name.c_str(), name_length);
 
@@ -20,7 +22,7 @@ std::ostream& operator<<(std::ostream &out, const Person &person) {
 }
 
 std::istream& operator>>(std::istream &in, Person &person) {
-	size_t name_length;
+	unsigned int name_length;
 	in.read(reinterpret_cast<char*>(&name_length), sizeof(name_length));
 	person.name.resize(name_length);
 	in.read(&person.name[0], name_length);
@@ -29,7 +31,10 @@ std::istream& operator>>(std::istream &in, Person &person) {
 	return in;
 }
 
+// Adult
+
 Adult::Adult(std::string name, double age, Profession profession) : Person(name, age), profession(profession) {}
+Adult::Adult() : Adult("", 0, Profession()) {}
 
 std::ostream& operator<<(std::ostream &out, const Adult &adult) {
 	out << static_cast<const Person&>(adult);
@@ -43,7 +48,10 @@ std::istream& operator>>(std::istream &in, Adult &adult) {
 	return in;
 }
 
+//Child
+
 Child::Child(std::string name, double age, Hobby hobby) : Person(name, age), hobby(hobby) {}
+Child::Child() : Child("", 0, Hobby()) {}
 
 std::ostream& operator<<(std::ostream &out, const Child &child) {
 	out << static_cast<const Person&>(child);

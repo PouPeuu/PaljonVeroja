@@ -23,6 +23,7 @@ class Adult : public Person {
 	public:
 		Profession profession;
 		Adult(std::string name, double age, Profession profession);
+		Adult();
 
 		friend std::ostream& operator<<(std::ostream &out, const Adult &adult);
 		friend std::istream& operator>>(std::istream &in, Adult &adult);
@@ -32,6 +33,7 @@ class Child : public Person {
 	public:
 		Hobby hobby;
 		Child(std::string name, double age, Hobby hobby);
+		Child();
 
 		friend std::ostream& operator<<(std::ostream &out, const Child &child);
 		friend std::istream& operator>>(std::istream &in, Child &child);

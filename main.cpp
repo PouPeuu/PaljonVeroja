@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	std::ofstream outfile;
-	Family family;
+	Family input_family;
 
 	if (vm.count("output")) {
 		outfile.open(vm["output"].as<std::string>());
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 	if (vm.count("input")) {
 		std::ifstream infile(vm["input"].as<std::string>());
 		if (infile.is_open()) {
-			infile >> family;
+			infile >> input_family;
 		} else {
 			std::cerr << "Failed to open input file!" << std::endl;
 			return 1;
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (vm.count("generate")) {
-		Family family(2, vm["generate"].as<unsigned int>());
+		Family family(2, vm["generate"].as<unsigned int>(), Names::create_name(true));
 		if (outfile.is_open()){
 			outfile << family;
 
@@ -55,7 +55,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (vm.count("summary")) {
-		std::cout << "Summary of " <<  << std::endl;
+		std::cout << "Summary of " << input_family.get_name() << ":" << std::endl;
+
 	}
 
 	return 0;

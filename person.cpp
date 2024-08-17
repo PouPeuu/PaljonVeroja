@@ -1,7 +1,5 @@
 #include "person.h"
 
-// Person
-
 Person::Person(std::string name, double age, Activity activity, bool parent) : name(name), age(age), activity(activity), parent(parent) {}
 
 std::string Person::get_name() {
@@ -14,6 +12,10 @@ double Person::get_age() {
 
 Activity Person::get_activity() {
 	return this->activity;
+}
+
+bool Person::is_parent() {
+	return this->parent;
 }
 
 std::ostream& operator<<(std::ostream &out, const Person &person) {

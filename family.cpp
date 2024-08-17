@@ -1,14 +1,14 @@
 #include "family.h"
 
-Family::Family(unsigned int n_parents, unsigned int n_children) : family_name(Names::create_name(true)) {
+Family::Family(unsigned int n_parents, unsigned int n_children, std::string family_name) : family_name(family_name) {
 	for (unsigned int i = 0; i < n_parents; ++i) {
 		std::pair<std::string, double> profession = Names::create_profession();
-		this->parents.push_back(Person(Names::create_name(true), 37, Activity(profession.first, profession.second)), true);
+		this->parents.push_back(Person(Names::create_name(true), 37, Activity(profession.first, profession.second), true));
 	}
 
 	for (unsigned int i = 0; i < n_children; ++i) {
 		std::pair<std::string, double> profession = Names::create_profession();
-		this->children.push_back(Person(Names::create_name(true), ((double) std::rand() / RAND_MAX) * 17.9999, Activity(profession.first, profession.second)), false);
+		this->children.push_back(Person(Names::create_name(true), ((double) std::rand() / RAND_MAX) * 17.9999, Activity(profession.first, profession.second), false));
 	}
 }
 

@@ -14,8 +14,8 @@ class Activity {
 		double get_flow();
 		double get_one_time();
 
-		friend std::ostream& operator<<(std::ostream &out, const Profession &profession);
-		friend std::istream& operator>>(std::istream &in, Profession &profession);
-}
+		friend std::ostream& operator<<(std::ostream &out, const Activity &activity);
+		friend std::istream& operator>>(std::istream &in, Activity &activity);
+};
 
 #endif // ACTIVITY_H

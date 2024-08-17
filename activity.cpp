@@ -7,8 +7,8 @@ std::ostream& operator<<(std::ostream &out, const Activity &activity) {
 	out.write(reinterpret_cast<char*>(&name_length), sizeof(name_length));
 	out.write(activity.name.c_str(), name_length);
 
-	out.write(reinterpret_cast<char*>(&activity.flow), sizeof(activity.flow));
-	out.write(reinterpret_cast<char*>(&activity.one_time), sizeof(activity.one_time));
+	out.write(reinterpret_cast<const char*>(&activity.flow), sizeof(activity.flow));
+	out.write(reinterpret_cast<const char*>(&activity.one_time), sizeof(activity.one_time));
 	return out;
 }
 

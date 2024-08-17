@@ -2,41 +2,25 @@
 #define PERSON_H
 
 #include "utils.h"
-#include "hobby.h"
-#include "profession.h"
+#include "activity.h"
 
 class Person {
 	private:
 		std::string name;
 		double age;
+		bool parent;
+		Activity activity;
 	public:
-		Person(std::string name, double age);
+		Person(std::string name, double age, Activity activity);
 
 		std::string get_name();
 		double get_age();
+		bool is_parent();
+
+		Activity get_activity();
 
 		friend std::ostream& operator<<(std::ostream &out, const Person &person);
 		friend std::istream& operator>>(std::istream &in, Person &person);
-};
-
-class Adult : public Person {
-	public:
-		Profession profession;
-		Adult(std::string name, double age, Profession profession);
-		Adult();
-
-		friend std::ostream& operator<<(std::ostream &out, const Adult &adult);
-		friend std::istream& operator>>(std::istream &in, Adult &adult);
-};
-
-class Child : public Person {
-	public:
-		Hobby hobby;
-		Child(std::string name, double age, Hobby hobby);
-		Child();
-
-		friend std::ostream& operator<<(std::ostream &out, const Child &child);
-		friend std::istream& operator>>(std::istream &in, Child &child);
 };
 
 #endif

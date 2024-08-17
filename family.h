@@ -6,18 +6,16 @@
 
 class Family {
 	private:
-		std::vector<Adult> parents;
-		std::vector<Child> children;
+		std::vector<Person> parents;
+		std::vector<Person> children;
 
 		std::string family_name;
 	public:
-		Family();
-		Family(unsigned int n_parents, unsigned int n_children);
+		Family(unsigned int n_parents = 0, unsigned int n_children = 0, std::string family_name = "Default");
 
-		std::string printable(bool include_parents = true, bool include_children = true);
-
-		double predict_monthly_cost();
-		double predict_monthly_salary();
+		double predict_flow();
+		double predict_one_time();
+		std::string get_name();
 
 		friend std::ostream& operator<<(std::ostream &out, const Family &family);
 		friend std::istream& operator>>(std::istream &in, Family &family);

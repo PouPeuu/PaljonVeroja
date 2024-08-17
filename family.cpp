@@ -1,77 +1,27 @@
 #include "family.h"
 
-Family::Family() : children(), parents(), family_name(Names::create_name(true)) {}
-
-Family::Family(unsigned int n_parents, unsigned int n_children) : Family() {
+Family::Family(unsigned int n_parents, unsigned int n_children) : family_name(Names::create_name(true)) {
 	for (unsigned int i = 0; i < n_parents; ++i) {
 		std::pair<std::string, double> profession = Names::create_profession();
-		this->parents.push_back(Adult(Names::create_name(true), 37, Profession(profession.first, profession.second)));
+		this->parents.push_back(Person(Names::create_name(true), 37, Activity(profession.first, profession.second)), true);
 	}
 
 	for (unsigned int i = 0; i < n_children; ++i) {
 		std::pair<std::string, double> profession = Names::create_profession();
-		this->children.push_back(Child(Names::create_name(true), ((double) std::rand() / RAND_MAX) * 17.9999, Hobby(profession.first, profession.second)));
+		this->children.push_back(Person(Names::create_name(true), ((double) std::rand() / RAND_MAX) * 17.9999, Activity(profession.first, profession.second)), false);
 	}
 }
 
-std::string separator = "----------------\n";
+double Family::predict_one_time() {
 
-std::string Family::printable(bool include_parents, bool include_children) {
-	std::string result = family_name + "n Perhe:\n";
-	result += "Määrä vanhempia: " + std::to_string(parents.size()) + "\n";
-	result += "Määrä lapsia: " + std::to_string(children.size()) + "\n";
-
-	if (include_parents){
-		for (unsigned int i = 0; i < parents.size(); ++i) {
-			Adult parent = parents[i];
-			result += separator;
-			result += "Vanhempi " + std::to_string(i) + "\n";
-			result += "Nimi: " + parent.get_name() + " " + family_name + "\n";
-			result += "Ikä: " + std::to_string(parent.get_age()) + "\n";
-			result += "Työ: " + parent.profession.get_name() + "\n";
-			result += "Kuukausipalkka: " + std::to_string(parent.profession.get_salary()) + "\n";
-		}
-	}
-
-	if (include_children){
-		for (unsigned int i = 0; i < children.size(); ++i) {
-			Child child = children[i];
-			result += separator;
-			result += "Lapsi " + std::to_string(i) + "\n";
-			result += "Nimi: " + child.get_name() + " " + family_name + "\n";
-			result += "Ikä: " + std::to_string(child.get_age()) + "\n";
-			result += "Harrastus: " + child.hobby.get_name() + "\n";
-			result += "Harrastuksen kulut: " + std::to_string(child.hobby.get_cost()) + "\n";
-		}
-	}
-
-	return result;
 }
 
-double Family::predict_monthly_cost() {
-	double total_cost;
+double Family::predict_flow() {
 
-	// Average monthly food cost
-	double food_cost = parents.size() * 300;
-	food_cost += children.size() * 200;
-
-	total_cost += food_cost;
-
-	for (Child& child : children) {
-		total_cost += child.hobby.get_cost();
-	}
-
-	return total_cost;
 }
 
-double Family::predict_monthly_salary() {
-	double gross_salary;
-
-	for (Adult& adult : parents) {
-		gross_salary += adult.profession.get_salary();
-	}
-
-	
+std::string Family::get_name() {
+	return this->family_name;
 }
 
 std::ostream& operator<<(std::ostream &out, const Family &family) {
@@ -82,12 +32,12 @@ std::ostream& operator<<(std::ostream &out, const Family &family) {
 	unsigned int n_parents = family.parents.size();
 	out.write(reinterpret_cast<char*>(&n_parents), sizeof(unsigned int));
 
+	unsigned int n_children = family.children.size();
+	out.write(reinterpret_cast<char*>(&n_children), sizeof(unsigned int));
+
 	for (unsigned int i = 0; i < n_parents; ++i) {
 		out << family.parents[i];
 	}
-
-	unsigned int n_children = family.children.size();
-	out.write(reinterpret_cast<char*>(&n_children), sizeof(unsigned int));
 
 	for (unsigned int i = 0; i < n_children; ++i) {
 		out << family.children[i];
@@ -105,17 +55,17 @@ std::istream& operator>>(std::istream &in, Family &family) {
 	unsigned int n_parents;
 	in.read(reinterpret_cast<char*>(&n_parents), sizeof(unsigned int));
 
-	for (unsigned int i = 0; i < n_parents; ++i) {
-		Adult adult;
-		in >> adult;
-		family.parents.push_back(adult);
-	}
-
 	unsigned int n_children;
 	in.read(reinterpret_cast<char*>(&n_children), sizeof(unsigned int));
 
+	for (unsigned int i = 0; i < n_parents; ++i) {
+		Person parent;
+		in >> parent;
+		family.parents.push_back(parent);
+	}
+
 	for (unsigned int i = 0; i < n_children; ++i) {
-		Child child;
+		Person child;
 		in >> child;
 		family.children.push_back(child);
 	}

@@ -24,17 +24,17 @@ std::string Family::get_name() {
 	return this->family_name;
 }
 
-std::vector<Person> get_everyone() {
+std::vector<Person> Family::get_everyone() {
 	std::vector<Person> everyone = this->parents;
 	everyone.insert(everyone.end(), this->children.begin(), this->children.end());
 	return everyone;
 }
 
-std::vector<Person> get_parents() {
+std::vector<Person> Family::get_parents() {
 	return this->parents;
 }
 
-std::vector<Person> get_children() {
+std::vector<Person> Family::get_children() {
 	return this->children;
 }
 

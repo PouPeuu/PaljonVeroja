@@ -20,11 +20,15 @@ bool Person::is_parent() {
 
 std::ostream& operator<<(std::ostream &out, const Person &person) {
 	unsigned int name_length = person.name.size();
-	out.write(reinterpret_cast<const char*>(&name_length), sizeof(name_length));
+	out.write(reinterpret_cast<char*>(&name_length), sizeof(name_length));
 
 	out.write(person.name.c_str(), name_length);
 
-	out.write(reinterpret_cast<const char*>(&person.age), sizeof(person.age));
+	double age = person.age;
+	out.write(reinterpret_cast<char*>(&age), sizeof(age));
+
+	bool is_parent = person.parent;
+	out.write(reinterpret_cast<char*>(&is_parent), sizeof(is_parent));
 
 	out << person.activity;
 	return out;
@@ -38,6 +42,8 @@ std::istream& operator>>(std::istream &in, Person &person) {
 	in.read(&person.name[0], name_length);
 
 	in.read(reinterpret_cast<char*>(&person.age), sizeof(person.age));
+
+	in.read(reinterpret_cast<char*>(&person.parent), sizeof(person.parent));
 
 	in >> person.activity;
 	return in;

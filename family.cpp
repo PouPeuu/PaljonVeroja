@@ -8,7 +8,7 @@ Family::Family(unsigned int n_parents, unsigned int n_children, std::string fami
 
 	for (unsigned int i = 0; i < n_children; ++i) {
 		std::pair<std::string, double> profession = Names::create_profession();
-		this->children.push_back(Person(Names::create_name(true), ((double) std::rand() / RAND_MAX) * 17.9999, Activity(profession.first, profession.second), false));
+		this->children.push_back(Person(Names::create_name(true), ((double) std::rand() / RAND_MAX) * 17.9999, Activity(profession.first, -profession.second), false));
 	}
 }
 

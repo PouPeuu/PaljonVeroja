@@ -17,6 +17,10 @@ class Family {
 		double predict_one_time();
 		std::string get_name();
 
+		std::vector<Person> get_everyone();
+		std::vector<Person> get_parents();
+		std::vector<Person> get_children();
+
 		friend std::ostream& operator<<(std::ostream &out, const Family &family);
 		friend std::istream& operator>>(std::istream &in, Family &family);
 };

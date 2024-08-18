@@ -24,6 +24,20 @@ std::string Family::get_name() {
 	return this->family_name;
 }
 
+std::vector<Person> get_everyone() {
+	std::vector<Person> everyone = this->parents;
+	everyone.insert(everyone.end(), this->children.begin(), this->children.end());
+	return everyone;
+}
+
+std::vector<Person> get_parents() {
+	return this->parents;
+}
+
+std::vector<Person> get_children() {
+	return this->children;
+}
+
 std::ostream& operator<<(std::ostream &out, const Family &family) {
 	unsigned int name_length = family.family_name.size();
 	out.write(reinterpret_cast<char*>(&name_length), sizeof(unsigned int));

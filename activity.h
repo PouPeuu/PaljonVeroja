@@ -13,6 +13,7 @@ class Activity {
 
 		double get_flow();
 		double get_one_time();
+		std::string get_name();
 
 		friend std::ostream& operator<<(std::ostream &out, const Activity &activity);
 		friend std::istream& operator>>(std::istream &in, Activity &activity);

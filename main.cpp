@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
 			printf("%s, %s:\n", person.get_name().c_str(), person.is_parent() ? "parent" : "child");
 			printf("Age: %lf\n", person.get_age());
 			printf("%s: %s\n", person.is_parent() ? "Job" : "Hobby", person.get_activity().get_name().c_str());
-			printf("%s: %lf\n", person.is_parent() ? "Salary" : "Monthly cost", person.get_activity().get_flow());
+			printf("%s: %lf€\n", person.is_parent() ? "Salary" : "Monthly cost", std::fabs(person.get_activity().get_flow()));
 			if (!person.is_parent())
 				printf("One time cost: %lf\n", person.get_activity().get_one_time());
 			std::cout << std::endl;

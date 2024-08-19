@@ -17,7 +17,19 @@ double Family::predict_one_time() {
 }
 
 double Family::predict_flow() {
+	double flow;
 
+	for (Person& person : this->get_everyone()) {
+		flow += person.get_activity().get_flow();
+
+		if (person.is_parent()) {
+			flow -= 400;
+		} else {
+			flow -= 300;
+		}
+	}
+
+	return flow;
 }
 
 std::string Family::get_name() {

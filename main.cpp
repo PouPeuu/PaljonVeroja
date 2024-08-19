@@ -55,8 +55,13 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (vm.count("summary")) {
-		std::cout << "Summary of " << input_family.get_name() << ":" << std::endl;
+		std::vector<Person> parents = input_family.get_parents();
+		std::vector<Person> children = input_family.get_children();
 
+		printf("Summary of %s:\n", input_family.get_name().c_str());
+		printf("Parents: %d\n", parents.size());
+		printf("Children: %d\n", children.size());
+		printf("Gross flow: %lf\n", input_family.predict_flow());
 	}
 
 	if (vm.count("list")) {

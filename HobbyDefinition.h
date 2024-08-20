@@ -1,0 +1,3 @@
+#ifndef HOBBY_DEFINITION_H
+#define HOBBY_DEFINITION_H
+#endif

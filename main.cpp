@@ -2,6 +2,7 @@
 #include "utils.h"
 #include "names.h"
 #include "family.h"
+#include "csv.h"
 
 namespace po = boost::program_options;
 
@@ -15,7 +16,9 @@ int main(int argc, char *argv[]) {
 		("input,i", po::value<std::string>(), "input file")
 		("output,o", po::value<std::string>(), "output file")
 		("summary,s", "show summary of the family")
-		("list,l", "list everyone in the family");
+		("list,l", "list everyone in the family")
+		("hobbies,H", po::value<std::string>(), "hobbies file")
+		("jobs,j", po::value<std::string>(), "jobs file");
 
 	po::variables_map vm;
 	po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -41,6 +44,13 @@ int main(int argc, char *argv[]) {
 			std::cerr << "Failed to open input file!" << std::endl;
 			return 1;
 		}
+	}
+
+	if (vm.count("hobbies")) {
+		// TODO: set Names::hobbies
+		std::vector<std::vector<std::string>> hobbies = CSV::load_csv(vm["hobbies"].as<std::string>());
+
+		
 	}
 
 	if (vm.count("generate")) {

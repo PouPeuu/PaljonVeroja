@@ -1,5 +1,7 @@
 #include "names.h"
 
+std::vector<std::vector<std::string>> Names::hobbies = {};
+
 std::string Names::create_name(bool uppercase_first) {
 	bool front = Utils::random_bool();
 

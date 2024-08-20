@@ -10,6 +10,10 @@
 #include <unordered_map>
 #include <iterator>
 #include <fstream>
+#include <filesystem>
+#include <cassert>
+
+namespace fs = std::filesystem;
 
 namespace Utils {
 	bool random_bool();

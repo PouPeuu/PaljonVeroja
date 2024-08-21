@@ -1,5 +1,7 @@
 #include "Names.h"
 
+std::vector<HobbyDefinition> Names::hobbies = {};
+
 std::string Names::create_name(bool uppercase_first) {
 	bool front = Utils::random_bool();
 
@@ -15,6 +17,10 @@ std::string Names::create_name(bool uppercase_first) {
 	if (uppercase_first)
 		name[0] = toupper(name[0]);
 	return name;
+}
+
+Activity Names::create_hobby() {
+	return Utils::random_choice(hobbies).create();
 }
 
 std::pair<std::string, double> Names::create_profession() {

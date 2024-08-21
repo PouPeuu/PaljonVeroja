@@ -47,13 +47,19 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (vm.count("hobbies")) {
-		// TODO: set Names::hobbies
 		std::vector<std::vector<std::string>> hobbies = CSV::load_csv(vm["hobbies"].as<std::string>());
 
-		
+		for (std::vector<std::string>& row : hobbies) {
+			HobbyDefinition hobby(row[0], std::stod(row[1]), std::stod(row[2]), std::stod(row[3]), std::stod(row[4]));
+			Names::hobbies.push_back(hobby);
+		}
 	}
 
 	if (vm.count("generate")) {
+		if (Names::hobbies.empty()) {
+			std::cerr << "No hobbies!\n";
+			return 1;
+		}
 		Family family(2, vm["generate"].as<unsigned int>(), Names::create_name(true));
 		if (outfile.is_open()){
 			outfile << family;

@@ -1,6 +1,6 @@
 #include "Family.h"
 
-Family::Family(unsigned int n_parents, unsigned int n_children, std::string family_name) : family_name(family_name) {
+Family::Family(unsigned int n_parents, unsigned int n_children, std::string family_name) : family_name(family_name), tax_table() {
 	for (unsigned int i = 0; i < n_parents; ++i) {
 		std::pair<std::string, double> profession = Names::create_profession();
 		this->parents.push_back(Person(Names::create_name(true), 37, Activity(profession.first, profession.second), true));
@@ -22,11 +22,76 @@ double Family::predict_one_time() {
 	return one_time;
 }
 
-double Family::predict_flow() {
+std::vector<double> benefits_list = {
+	94.88,
+	104.84,
+	133.79,
+	173.24,
+	192.69
+};
+
+double Family::predict_child_benefits() {
+	double benefits = 0;
+
+	size_t child = 0;
+
+	for (Person& person : this->get_children()) {
+		if (child >= benefits_list.size()) {
+			benefits += benefits_list.back();
+			continue;
+		}
+		benefits += benefits_list[child];
+		child++;
+	}
+
+	return benefits;
+}
+
+double Family::predict_salary(bool do_taxes) {
+	double income = 0;
+
+	for (Person& person : this->get_parents()) {
+		double person_flow = person.get_activity().get_flow();
+
+		if (person_flow < 0)
+			continue;
+		
+		if (do_taxes) {
+			double taxes;
+			std::tuple<bool, double, double> tax_rate = tax_table.get_tax_rate(person_flow * 12);
+			taxes += std::get<1>(tax_rate);
+
+			if (std::get<0>(tax_rate)) {
+				taxes += person_flow * std::get<2>(tax_rate);
+			}
+
+			income -= taxes / 12;
+		}
+
+		income += person_flow;
+	}
+
+	return income;
+}
+
+double Family::predict_flow(bool do_taxes) {
 	double flow;
 
 	for (Person& person : this->get_everyone()) {
-		flow += person.get_activity().get_flow();
+		double person_flow = person.get_activity().get_flow();
+
+		if (person_flow > 0 && do_taxes) {
+			double taxes;
+			std::tuple<bool, double, double> tax_rate = tax_table.get_tax_rate(person_flow);
+			taxes += std::get<1>(tax_rate);
+
+			if (std::get<0>(tax_rate)) {
+				taxes += person_flow * std::get<2>(tax_rate);
+			}
+
+			flow -= taxes;
+		}
+		flow += person_flow;
 
 		if (person.is_parent()) {
 			flow -= 400;
@@ -34,6 +99,8 @@ double Family::predict_flow() {
 			flow -= 300;
 		}
 	}
+
+
 
 	return flow;
 }
@@ -54,6 +121,10 @@ std::vector<Person> Family::get_parents() {
 
 std::vector<Person> Family::get_children() {
 	return this->children;
+}
+
+void Family::set_tax_table(TaxTable tax_table) {
+	this->tax_table = tax_table;
 }
 
 std::ostream& operator<<(std::ostream &out, const Family &family) {

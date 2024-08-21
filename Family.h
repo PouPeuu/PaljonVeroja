@@ -16,7 +16,9 @@ class Family {
 	public:
 		Family(unsigned int n_parents = 0, unsigned int n_children = 0, std::string family_name = "Default");
 
-		double predict_flow();
+		double predict_flow(bool do_taxes = true);
+		double predict_salary(bool do_taxes = true);
+		double predict_child_benefits();
 		double predict_one_time();
 		std::string get_name();
 

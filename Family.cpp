@@ -13,7 +13,13 @@ Family::Family(unsigned int n_parents, unsigned int n_children, std::string fami
 }
 
 double Family::predict_one_time() {
+	double one_time;
 
+	for (Person& person : this->get_everyone()) {
+		one_time += person.get_activity().get_one_time();
+	}
+
+	return one_time;
 }
 
 double Family::predict_flow() {

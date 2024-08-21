@@ -16,8 +16,6 @@
 namespace fs = std::filesystem;
 
 namespace Utils {
-	bool random_bool();
-
 	template <typename Container>
 	typename Container::value_type random_choice(const Container& container) {
 		if (container.empty()) {
@@ -37,6 +35,10 @@ namespace Utils {
 		}
 		return result;
 	};
+
+	bool random_bool();
+	int random_int(int min, int max);
+	double random_double(double min, double max);
 }
 
 #endif

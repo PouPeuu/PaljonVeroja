@@ -3,6 +3,7 @@
 #include "Names.h"
 #include "Family.h"
 #include "CSV.h"
+#include "TaxTable.h"
 
 namespace po = boost::program_options;
 
@@ -18,7 +19,8 @@ int main(int argc, char *argv[]) {
 		("summary,s", "show summary of the family")
 		("list,l", "list everyone in the family")
 		("hobbies,H", po::value<std::string>(), "hobbies file")
-		("jobs,j", po::value<std::string>(), "jobs file");
+		("jobs,j", po::value<std::string>(), "jobs file")
+		("taxtable,t", po::value<std::string>(), "tax table file");
 
 	po::variables_map vm;
 	po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -55,6 +57,23 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	if (vm.count("taxtable")) {
+		std::vector<std::vector<std::string>> tax_table_csv = CSV::load_csv(vm["taxtable"].as<std::string>());
+
+		std::vector<std::tuple<double, double, double>> tax_table;
+
+		for (std::vector<std::string>& row : tax_table_csv) {
+			if (row[0] == "inf") {
+				tax_table.push_back(std::make_tuple(0, std::stod(row[1]), std::stod(row[2])));
+				continue;
+			}
+
+			tax_table.push_back(std::make_tuple(std::stod(row[0]), std::stod(row[1]), std::stod(row[2])));
+		}
+
+		input_family.set_tax_table(TaxTable(tax_table));
+	}
+
 	if (vm.count("generate")) {
 		if (Names::hobbies.empty()) {
 			std::cerr << "No hobbies!\n";
@@ -77,7 +96,10 @@ int main(int argc, char *argv[]) {
 		printf("Summary of %s:\n", input_family.get_name().c_str());
 		printf("Parents: %d\n", parents.size());
 		printf("Children: %d\n", children.size());
-		printf("Gross flow: %lf\n", input_family.predict_flow());
+		printf("Income: %lf€\n", input_family.predict_salary(false));
+		printf("Income after taxes: %lf€\n", input_family.predict_salary(true));
+		printf("Child benefits: %lf€\n", input_family.predict_child_benefits());
+		printf("One time costs: %lf€\n", input_family.predict_one_time());
 	}
 
 	if (vm.count("list")) {

@@ -24,6 +24,10 @@ int main(int argc, char *argv[]) {
 
 	po::variables_map vm;
 	po::store(po::parse_command_line(argc, argv, desc), vm);
+	
+	std::ifstream config_file("config.cfg");
+	po::store(po::parse_config_file(config_file, desc), vm);
+
 	po::notify(vm);
 
 	if (vm.count("help") || vm.empty()) {

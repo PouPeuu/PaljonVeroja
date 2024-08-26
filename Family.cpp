@@ -1,6 +1,7 @@
 #include "Family.h"
 
-Family::Family(unsigned int n_parents, unsigned int n_children, std::string family_name) : family_name(family_name), tax_table() {
+Family::Family(unsigned int n_parents, unsigned int n_children, std::string family_name, Municipality municipality, Religion religion)
+: family_name(family_name), tax_table(), municipality(municipality), religion(religion) {
 	for (unsigned int i = 0; i < n_parents; ++i) {
 		std::pair<std::string, double> profession = Names::create_profession();
 		this->parents.push_back(Person(Names::create_name(true), 37, Activity(profession.first, profession.second), true));
@@ -83,6 +84,10 @@ std::vector<Person> Family::get_children() {
 	return this->children;
 }
 
+Municipality Family::get_municipality() {
+	return this->municipality;
+}
+
 void Family::set_tax_table(TaxTable tax_table) {
 	this->tax_table = tax_table;
 }
@@ -97,6 +102,9 @@ std::ostream& operator<<(std::ostream &out, const Family &family) {
 
 	unsigned int n_children = family.children.size();
 	out.write(reinterpret_cast<char*>(&n_children), sizeof(unsigned int));
+
+	unsigned int municipality_index = family.municipality.index;
+	out.write(reinterpret_cast<char*>(&municipality_index), sizeof(unsigned int));
 
 	unsigned int religion = family.religion;
 	out.write(reinterpret_cast<char*>(&religion), sizeof(unsigned int));
@@ -123,6 +131,10 @@ std::istream& operator>>(std::istream &in, Family &family) {
 
 	unsigned int n_children;
 	in.read(reinterpret_cast<char*>(&n_children), sizeof(unsigned int));
+
+	unsigned int municipality_index;
+	in.read(reinterpret_cast<char*>(&municipality_index), sizeof(unsigned int));
+	family.municipality = Names::municipalities[municipality_index];
 
 	unsigned int religion;
 	in.read(reinterpret_cast<char*>(&religion), sizeof(unsigned int));

@@ -20,9 +20,11 @@ class Family {
 
 		TaxTable tax_table;
 
+		Municipality municipality;
+
 		Religion religion;
 	public:
-		Family(unsigned int n_parents = 0, unsigned int n_children = 0, std::string family_name = "Default");
+		Family(unsigned int n_parents = 0, unsigned int n_children = 0, std::string family_name = "Default", Municipality municipality = Municipality(), Religion religion = NONE);
 
 		double get_child_benefits();
 		double get_one_time();
@@ -33,6 +35,8 @@ class Family {
 		std::vector<Person> get_everyone();
 		std::vector<Person> get_parents();
 		std::vector<Person> get_children();
+
+		Municipality get_municipality();
 
 		void set_tax_table(TaxTable tax_table);
 

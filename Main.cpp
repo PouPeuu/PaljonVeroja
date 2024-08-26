@@ -45,6 +45,15 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	if (vm.count("jobs")) {
+		std::vector<std::vector<std::string>> jobs = CSV::load_csv(vm["jobs"].as<std::string>());
+
+		for (std::vector<std::string>& row : jobs) {
+			ActivityDefinition job(row[0], std::stod(row[1]), std::stod(row[2]), 0, 0);
+			Names::jobs.push_back(job);
+		}
+	}
+
 	if (vm.count("municipalities")) {
 		std::vector<std::vector<std::string>> municipalities_csv = CSV::load_csv(vm["municipalities"].as<std::string>());
 
@@ -92,6 +101,11 @@ int main(int argc, char *argv[]) {
 	if (vm.count("generate")) {
 		if (Names::hobbies.empty()) {
 			std::cerr << "No hobbies!\n";
+			return 1;
+		}
+
+		if (Names::jobs.empty()) {
+			std::cerr << "No jobs!\n";
 			return 1;
 		}
 

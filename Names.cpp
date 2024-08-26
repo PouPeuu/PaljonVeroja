@@ -1,6 +1,7 @@
 #include "Names.h"
 
 std::vector<ActivityDefinition> Names::hobbies = {};
+std::vector<ActivityDefinition> Names::jobs = {};
 std::vector<Municipality> Names::municipalities = {};
 
 std::string Names::create_name(bool uppercase_first) {
@@ -22,6 +23,10 @@ std::string Names::create_name(bool uppercase_first) {
 
 Activity Names::create_hobby() {
 	return Utils::random_choice(hobbies).create();
+}
+
+Activity Names::create_job() {
+	return Utils::random_choice(jobs).create();
 }
 
 std::pair<std::string, double> Names::create_profession() {

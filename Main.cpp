@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
 		("list,l", "list everyone in the family")
 		("hobbies,H", po::value<std::string>(), "hobbies file")
 		("jobs,j", po::value<std::string>(), "jobs file")
+		("municipalities,m", po::value<std::string>(), "municipalities file")
 		("taxtable,t", po::value<std::string>(), "tax table file");
 
 	po::variables_map vm;
@@ -33,6 +34,16 @@ int main(int argc, char *argv[]) {
 	if (vm.count("help") || vm.empty()) {
 		std::cout << desc << "\n";
 		return 1;
+	}
+
+	if (vm.count("municipalities")) {
+		std::vector<std::vector<std::string>> municipalities_csv = CSV::load_csv(vm["municipalities"].as<std::string>());
+
+		for (unsigned int i = 0; i < municipalities_csv.size(); ++i) {
+			std::vector<std::string>& row = municipalities_csv[i];
+			Municipality municipality(row[0], std::stod(row[1]), std::stod(row[2]), std::stod(row[3]), i);
+			Names::municipalities.push_back(municipality);
+		}
 	}
 
 	std::ofstream outfile;

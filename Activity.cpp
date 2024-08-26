@@ -14,6 +14,12 @@ std::string Activity::get_name() {
 	return this->name;
 }
 
+Activity& Activity::invert() {
+	this->flow *= -1;
+	this->one_time *= -1;
+	return *this;
+}
+
 
 std::ostream& operator<<(std::ostream &out, const Activity &activity) {
 	unsigned int name_length = activity.name.size();

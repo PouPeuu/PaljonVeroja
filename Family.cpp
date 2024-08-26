@@ -61,6 +61,9 @@ double Family::get_income() {
 	return income;
 }
 
+Religion Family::get_religion() {
+	return this->religion;
+}
 
 std::string Family::get_name() {
 	return this->family_name;
@@ -95,6 +98,9 @@ std::ostream& operator<<(std::ostream &out, const Family &family) {
 	unsigned int n_children = family.children.size();
 	out.write(reinterpret_cast<char*>(&n_children), sizeof(unsigned int));
 
+	unsigned int religion = family.religion;
+	out.write(reinterpret_cast<char*>(&religion), sizeof(unsigned int));
+
 	for (unsigned int i = 0; i < n_parents; ++i) {
 		out << family.parents[i];
 	}
@@ -117,6 +123,10 @@ std::istream& operator>>(std::istream &in, Family &family) {
 
 	unsigned int n_children;
 	in.read(reinterpret_cast<char*>(&n_children), sizeof(unsigned int));
+
+	unsigned int religion;
+	in.read(reinterpret_cast<char*>(&religion), sizeof(unsigned int));
+	family.religion = Religion(religion);
 
 	for (unsigned int i = 0; i < n_parents; ++i) {
 		Person parent;

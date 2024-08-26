@@ -3,8 +3,8 @@
 Family::Family(unsigned int n_parents, unsigned int n_children, std::string family_name, Municipality municipality, Religion religion)
 : family_name(family_name), tax_table(), municipality(municipality), religion(religion) {
 	for (unsigned int i = 0; i < n_parents; ++i) {
-		std::pair<std::string, double> profession = Names::create_profession();
-		this->parents.push_back(Person(Names::create_name(true), 37, Activity(profession.first, profession.second), true));
+		Activity job = Names::create_job();
+		this->parents.push_back(Person(Names::create_name(true), 37, job, true));
 	}
 
 	for (unsigned int i = 0; i < n_children; ++i) {

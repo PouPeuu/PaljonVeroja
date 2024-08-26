@@ -4,21 +4,56 @@ std::vector<ActivityDefinition> Names::hobbies = {};
 std::vector<ActivityDefinition> Names::jobs = {};
 std::vector<Municipality> Names::municipalities = {};
 
-std::string Names::create_name(bool uppercase_first) {
+std::vector<std::string> consonants = {"b", "d", "f", "g", "h", "j", "k", "l", "m", "n", "ng", "p", "r", "s", "t", "v"};
+
+std::vector<std::string> front_vowels = {"y", "ö", "ä"};
+std::vector<std::string> neutral_vowels = {"e", "i"};
+std::vector<std::string> back_vowels = {"u", "o", "a"};
+
+std::vector<std::string> two_consonant_preludes = {"n", "m", "ng", "s", "r"};
+
+typedef struct {
+	std::string text;
+	bool two_consonant_end;
+} Syllable;
+
+std::string Names::create_name() {
 	bool front = Utils::random_bool();
 
-	std::string name = "";
-	for (int i = 0; i < std::rand() % 5 + 2; ++i) {
-		if (front) {
-			name += Utils::random_choice(std::vector<std::string>{"rolli", "polli", "molli", "volli", "golli", "jolli", "jalli", "lalli", "lulli", "montti", "lontti", "lantti", "lyntti", "mantti", "konkare", "kontti"});
-		} else {
-			name += Utils::random_choice(std::vector<std::string>{"rölli", "pölli", "mölli", "völli", "gölli", "jölli", "jälli", "pälli", "lälli", "lylli", "möntti", "löntti", "läntti", "lyntti", "mäntti", "könkäre", "köntti"});
-		}
+	std::vector<std::string> acceptable_vowels = neutral_vowels;
+
+	if (front) {
+		acceptable_vowels = Utils::merge(acceptable_vowels, front_vowels);
+	} else {
+		acceptable_vowels = Utils::merge(acceptable_vowels, back_vowels);
 	}
 
-	if (uppercase_first)
-		name[0] = toupper(name[0]);
-	return name;
+	std::string text = "";
+
+	for (unsigned int i = 0; i < Utils::random_int(1, 7); ++i) {
+		Syllable syllable;
+		
+		if (Utils::random_bool()) {
+			syllable.text += Utils::random_choice(consonants);
+		}
+
+		for (unsigned int j = 0; j < Utils::random_int(1, 3); ++j) {
+			syllable.text += Utils::random_choice(acceptable_vowels);
+		}
+
+		if (Utils::random_bool()) {
+			std::string consonant = Utils::random_choice(consonants);
+			syllable.text += consonant;
+
+			if (std::find(two_consonant_preludes.begin(), two_consonant_preludes.end(), consonant) != two_consonant_preludes.end() && Utils::random_bool()) {
+				syllable.text += "idk";
+			}
+		}
+
+		text += syllable.text;
+	}
+
+	return text;
 }
 
 Activity Names::create_hobby() {

@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
 			return 1;
 		}
 
-		Family family(2, vm["generate"].as<unsigned int>(), Names::create_name(true), Utils::random_choice(Names::municipalities), Religion(std::rand()%3));
+		Family family(2, vm["generate"].as<unsigned int>(), Names::create_name(), Utils::random_choice(Names::municipalities), Religion(std::rand()%3));
 
 		if (outfile.is_open()){
 			outfile << family;

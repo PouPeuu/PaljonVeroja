@@ -10,7 +10,7 @@ namespace Names {
 	extern std::vector<ActivityDefinition> jobs;
 	extern std::vector<Municipality> municipalities;
 
-	std::string create_name(bool uppercase_first = true);
+	std::string create_name();
 	std::pair<std::string, double> create_profession();
 	Activity create_hobby();
 	Activity create_job();

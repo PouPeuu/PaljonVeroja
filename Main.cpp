@@ -36,6 +36,15 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
+	if (vm.count("hobbies")) {
+		std::vector<std::vector<std::string>> hobbies = CSV::load_csv(vm["hobbies"].as<std::string>());
+
+		for (std::vector<std::string>& row : hobbies) {
+			ActivityDefinition hobby(row[0], std::stod(row[1]), std::stod(row[2]), std::stod(row[3]), std::stod(row[4]));
+			Names::hobbies.push_back(hobby);
+		}
+	}
+
 	if (vm.count("municipalities")) {
 		std::vector<std::vector<std::string>> municipalities_csv = CSV::load_csv(vm["municipalities"].as<std::string>());
 
@@ -60,15 +69,6 @@ int main(int argc, char *argv[]) {
 		} else {
 			std::cerr << "Failed to open input file!" << std::endl;
 			return 1;
-		}
-	}
-
-	if (vm.count("hobbies")) {
-		std::vector<std::vector<std::string>> hobbies = CSV::load_csv(vm["hobbies"].as<std::string>());
-
-		for (std::vector<std::string>& row : hobbies) {
-			HobbyDefinition hobby(row[0], std::stod(row[1]), std::stod(row[2]), std::stod(row[3]), std::stod(row[4]));
-			Names::hobbies.push_back(hobby);
 		}
 	}
 

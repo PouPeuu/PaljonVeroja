@@ -4,7 +4,7 @@ TaxTable::TaxTable(std::vector<std::tuple<double, double, double>> table) : tabl
 
 TaxTable::TaxTable() : table() {}
 
-std::tuple<bool, double, double> TaxTable::get_tax_rate(double income) {
+std::tuple<bool, double, double> TaxTable::get_national_tax_rate(double income) {
     double previous = 0;
 
     for (std::tuple<double, double, double>& bracket : table) {

@@ -10,7 +10,7 @@ class TaxTable {
         TaxTable(std::vector<std::tuple<double, double, double>> table);
         TaxTable();
 
-        std::tuple<bool, double, double> get_tax_rate(double income);
+        std::tuple<bool, double, double> get_national_tax_rate(double income);
 };
 
 #endif // TAXTABLE_H

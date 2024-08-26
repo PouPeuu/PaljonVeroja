@@ -92,6 +92,10 @@ void Family::set_tax_table(TaxTable tax_table) {
 	this->tax_table = tax_table;
 }
 
+TaxTable Family::get_tax_table() {
+	return this->tax_table;
+}
+
 std::ostream& operator<<(std::ostream &out, const Family &family) {
 	unsigned int name_length = family.family_name.size();
 	out.write(reinterpret_cast<char*>(&name_length), sizeof(unsigned int));

@@ -39,6 +39,7 @@ class Family {
 		Municipality get_municipality();
 
 		void set_tax_table(TaxTable tax_table);
+		TaxTable get_tax_table();
 
 		Religion get_religion();
 

@@ -1,6 +1,6 @@
 #include "Names.h"
 
-std::vector<HobbyDefinition> Names::hobbies = {};
+std::vector<ActivityDefinition> Names::hobbies = {};
 
 std::string Names::create_name(bool uppercase_first) {
 	bool front = Utils::random_bool();

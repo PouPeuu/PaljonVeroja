@@ -20,3 +20,11 @@ std::tuple<bool, double, double> TaxTable::get_national_tax_rate(double income) 
     // die
     return std::make_tuple(false, 0, 0);
 }
+
+double TaxTable::get_employment_pension_insurance_rate(double age) {
+    return age < 53 ? 0.0715 : 0.0865;
+}
+
+double TaxTable::get_unemployment_insurance_rate() {
+    return 0.0079;
+}

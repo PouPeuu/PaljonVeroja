@@ -22,7 +22,7 @@ std::string Names::create_name(bool uppercase_first) {
 }
 
 Activity Names::create_hobby() {
-	return Utils::random_choice(hobbies).create();
+	return Utils::random_choice(hobbies).create().invert();
 }
 
 Activity Names::create_job() {

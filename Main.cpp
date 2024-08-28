@@ -124,13 +124,42 @@ int main(int argc, char *argv[]) {
 		std::vector<Person> parents = input_family.get_parents();
 		std::vector<Person> children = input_family.get_children();
 
+		TaxTable tax_table = input_family.get_tax_table();
+		double income = input_family.get_income();
+
+		Religion religion = input_family.get_religion();
+		std::string religion_string = religion == NONE ? "None" : religion == EVANGELICAL_LUTHERAN ? "Evangelical Lutheran" : "Orthodox";
+
+		std::tuple<bool, double, double> national_tax_rate = tax_table.get_national_tax_rate(income); 
+		double municipality_tax_rate = input_family.get_municipality().get_income_tax_percent();
+		double orthodox_tax_rate = input_family.get_municipality().get_orthodox_tax_percent();
+		double evangelical_lutheran_tax_rate = input_family.get_municipality().get_evangelical_lutheran_tax_percent();
+
 		printf("Summary of %s:\n", input_family.get_name().c_str());
+		printf("Municipality: %s\n", input_family.get_municipality().name.c_str());
+		printf("Religion: %s\n", religion_string.c_str());
 		printf("Parents: %d\n", parents.size());
 		printf("Children: %d\n", children.size());
-		printf("Income: %lf€\n", input_family.predict_salary(false));
-		printf("Income after taxes: %lf€\n", input_family.predict_salary(true));
-		printf("Child benefits: %lf€\n", input_family.predict_child_benefits());
-		printf("One time costs: %lf€\n", input_family.predict_one_time());
+		printf("Gross Income: %lf€\n", input_family.get_income());
+
+		double national_tax_deduction = income * std::get<2>(national_tax_rate);
+		printf("National Tax: %lf%, %lf€\n", std::get<2>(national_tax_rate) * 100, national_tax_deduction);
+
+		double municipality_tax_deduction = income * municipality_tax_rate;
+		printf("Municipality Tax: %lf%, %lf€\n", municipality_tax_rate * 100, municipality_tax_deduction);
+
+		double religion_tax_deduction = 0;
+		if (religion == ORTHODOX) {
+			religion_tax_deduction = income * orthodox_tax_rate;
+			printf("Orthodox Tax: %lf%, %lf€\n", orthodox_tax_rate * 100, religion_tax_deduction);
+		} else if (religion == EVANGELICAL_LUTHERAN) {
+			religion_tax_deduction = income * evangelical_lutheran_tax_rate;
+			printf("Evangelical Lutheran Tax: %lf%, %lf€\n", evangelical_lutheran_tax_rate * 100, religion_tax_deduction);
+		}
+		//printf("Employment Pension Insurance: %lf%, %lf€\n", tax_table.get_employment_pension_insurance_rate());
+		printf("Net Income: %lf€\n", income - national_tax_deduction - municipality_tax_deduction - religion_tax_deduction);
+		printf("Child Benefits: %lf€\n", input_family.get_child_benefits());
+		printf("One Time Costs: %lf€\n", input_family.get_one_time());
 	}
 
 	if (vm.count("list")) {

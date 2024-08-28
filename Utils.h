@@ -12,6 +12,8 @@
 #include <fstream>
 #include <filesystem>
 #include <cassert>
+#include <unicode/unistr.h>
+#include <unicode/ustream.h>
 
 namespace fs = std::filesystem;
 

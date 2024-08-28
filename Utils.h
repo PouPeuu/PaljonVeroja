@@ -36,6 +36,16 @@ namespace Utils {
 		return result;
 	};
 
+	template <typename T>
+	bool contains(std::vector<T> v1, T target) {
+		for (T& value : v1) {
+			if (value == target)
+				return true;
+		}
+		
+		return false;
+	}
+
 	bool random_bool();
 	int random_int(int min, int max);
 	double random_double(double min, double max);

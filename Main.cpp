@@ -246,7 +246,11 @@ int main(int argc, char *argv[]) {
 			Religion religion = input_family.get_religion();
 
 			double municipality_tax_rate = municipality.get_income_tax_percent();
-			double religion_tax_rate = religion == EVANGELICAL_LUTHERAN ? municipality.get_evangelical_lutheran_tax_percent() : religion == ORTHODOX ? municipality.get_orthodox_tax_percent() : 0;
+			double religion_tax_rate = 
+			religion == EVANGELICAL_LUTHERAN ? municipality.get_evangelical_lutheran_tax_percent() : 
+			religion == ORTHODOX ? municipality.get_orthodox_tax_percent() : 
+			0;
+			
 			std::tuple<bool, double, double> tax_row = tax_table.get_national_tax_rate(income*12);
 			double employment_pension_insurance_rate = tax_table.get_employment_pension_insurance_rate(person.get_age());
 			double unemployment_insurance_rate = tax_table.get_unemployment_insurance_rate();
@@ -265,7 +269,12 @@ int main(int argc, char *argv[]) {
 			printf("Employment Pension Insurance: %lf%, %lf€\n", employment_pension_insurance_rate * 100, employment_pension_insurance_deduction);
 			printf("Unemplyment Insurance: %lf%, %lf€\n", unemployment_insurance_rate * 100, unemployment_insurance_deduction);
 
-			double total_deductions = municipality_tax_deduction + religion_tax_deduction + national_tax_deduction + employment_pension_insurance_deduction + unemployment_insurance_deduction;
+			double total_deductions = 
+			  municipality_tax_deduction 
+			+ religion_tax_deduction 
+			+ national_tax_deduction 
+			+ employment_pension_insurance_deduction 
+			+ unemployment_insurance_deduction;
 
 			printf("Total After Deductions: %lf€ - %lf€ = %lf€\n", income, total_deductions, income - total_deductions);
 

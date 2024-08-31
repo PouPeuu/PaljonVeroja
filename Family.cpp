@@ -4,12 +4,12 @@ Family::Family(unsigned int n_parents, unsigned int n_children, std::string fami
 : family_name(family_name), tax_table(), municipality(municipality), religion(religion) {
 	for (unsigned int i = 0; i < n_parents; ++i) {
 		Activity job = Names::create_job();
-		this->parents.push_back(Person(Names::create_name(), 37, job, true));
+		this->parents.push_back(Person(Names::create_name() + " " + Names::create_name(), 37, job, true));
 	}
 
 	for (unsigned int i = 0; i < n_children; ++i) {
 		Activity hobby = Names::create_hobby();
-		this->children.push_back(Person(Names::create_name(), Utils::random_double(0, 17.99999), hobby, false));
+		this->children.push_back(Person(Names::create_name() + " " + Names::create_name(), Utils::random_double(0, 17.99999), hobby, false));
 	}
 }
 
@@ -82,6 +82,18 @@ std::vector<Person> Family::get_parents() {
 
 std::vector<Person> Family::get_children() {
 	return this->children;
+}
+
+unsigned int Family::get_amount_of_children() {
+	return this->children.size();
+}
+
+unsigned int Family::get_amount_of_parents() {
+	return this->parents.size();
+}
+
+unsigned int Family::get_amount_of_people() {
+	return this->get_everyone().size();
 }
 
 Municipality Family::get_municipality() {

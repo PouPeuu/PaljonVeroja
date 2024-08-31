@@ -1,0 +1,19 @@
+/*double Family::calculate_taxes(double monthly_income) {
+	double taxes;
+	std::tuple<bool, double, double> tax_rate = tax_table.get_national_tax_rate(monthly_income * 12);
+	taxes += std::get<1>(tax_rate);
+
+	if (std::get<0>(tax_rate)) {
+		taxes += monthly_income * (std::get<2>(tax_rate) / 12);
+	}
+
+	taxes += monthly_income * (municipality.get_income_tax_percent() / 12);
+
+	if (religion == EVANGELICAL_LUTHERAN) {
+		taxes += monthly_income * (municipality.get_evangelical_lutheran_tax_percent() / 12);
+	} else if (religion == ORTHODOX) {
+		taxes += monthly_income * (municipality.get_orthodox_tax_percent() / 12);
+	}
+
+	return taxes;
+}*/

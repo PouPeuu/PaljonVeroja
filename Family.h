@@ -36,6 +36,10 @@ class Family {
 		std::vector<Person> get_parents();
 		std::vector<Person> get_children();
 
+		unsigned int get_amount_of_parents();
+		unsigned int get_amount_of_children();
+		unsigned int get_amount_of_people();
+
 		Municipality get_municipality();
 
 		void set_tax_table(TaxTable tax_table);

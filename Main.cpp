@@ -130,7 +130,7 @@ int main(int argc, char *argv[]) {
 		Religion religion = input_family.get_religion();
 		std::string religion_string = religion == NONE ? "None" : religion == EVANGELICAL_LUTHERAN ? "Evangelical Lutheran" : "Orthodox";
 
-		std::tuple<bool, double, double> national_tax_rate = tax_table.get_national_tax_rate(income); 
+		std::tuple<bool, double, double> national_tax_rate = tax_table.get_national_tax_rate(income*12); 
 		double municipality_tax_rate = input_family.get_municipality().get_income_tax_percent();
 		double orthodox_tax_rate = input_family.get_municipality().get_orthodox_tax_percent();
 		double evangelical_lutheran_tax_rate = input_family.get_municipality().get_evangelical_lutheran_tax_percent();
@@ -157,21 +157,119 @@ int main(int argc, char *argv[]) {
 			printf("Evangelical Lutheran Tax: %lf%, %lf€\n", evangelical_lutheran_tax_rate * 100, religion_tax_deduction);
 		}
 		//printf("Employment Pension Insurance: %lf%, %lf€\n", tax_table.get_employment_pension_insurance_rate());
-		printf("Net Income: %lf€\n", income - national_tax_deduction - municipality_tax_deduction - religion_tax_deduction);
+		printf("Income After Taxes: %lf€\n", income - national_tax_deduction - municipality_tax_deduction - religion_tax_deduction);
 		printf("Child Benefits: %lf€\n", input_family.get_child_benefits());
-		printf("One Time Costs: %lf€\n", input_family.get_one_time());
+		printf("One Time Hobby Costs: %lf€\n", -input_family.get_one_time());
+		
+		double house_area = 90;
+
+		double area_per_child = 10;
+
+		house_area += area_per_child * input_family.get_amount_of_children();
+
+		double price_per_square_meter = 1951;
+
+		double housing_cost = house_area * price_per_square_meter;
+
+		printf("House Cost: %lf€\n", housing_cost);
+
+		double food_cost_per_parent = 400;
+		double food_cost_per_child = 300;
+
+		double total_food_cost = food_cost_per_parent * input_family.get_amount_of_parents() + food_cost_per_child * input_family.get_amount_of_children();
+
+		printf("Food Cost: %lf€\n", total_food_cost);
+
+		double monthly_transportation_cost = 50 * input_family.get_amount_of_parents();
+
+		for (Person& child : input_family.get_children()) {
+			monthly_transportation_cost += child.get_age() <= 7 ? 0 : 30;
+		}
+
+		printf("Transporation Cost: %lf€\n", monthly_transportation_cost);
+
+		double water_usage_liters = 7000 * input_family.get_amount_of_people();
+		double water_cost_per_liter = 0.00186;
+		double water_cost = water_usage_liters * water_cost_per_liter;
+
+		printf("Water Cost: %lf€\n", water_cost);
+
+		double electricity_usage_kilowatt_hours = 500 * input_family.get_amount_of_people(); // pulled this out of my ass
+		double electricity_cost_per_kilowatt_hour = 0.203;
+		double electricity_cost = electricity_usage_kilowatt_hours * electricity_cost_per_kilowatt_hour;
+
+		printf("Electricity Cost: %lf€\n", electricity_cost);
+
+		double employment_pension_insurance_rate = tax_table.get_employment_pension_insurance_rate(37); // hardcoded because I'm lazy
+		double unemployment_insurance_rate = tax_table.get_unemployment_insurance_rate();
+
+		double employment_pension_insurance_deduction = income * employment_pension_insurance_rate;
+		double unemployment_insurance_deduction = income * unemployment_insurance_rate;
+
+		double monthly_money_left_so_far = income 
+		- national_tax_deduction 
+		- municipality_tax_deduction 
+		- religion_tax_deduction 
+		- employment_pension_insurance_deduction 
+		- unemployment_insurance_deduction
+		- monthly_transportation_cost
+		- water_cost
+		- electricity_cost;
+
+		double other_monthly_costs = Utils::random_double(0, monthly_money_left_so_far);
+
+		printf("Other Costs: %lf€\n", other_monthly_costs);
+
+		printf("Net Income: %lf€\n", monthly_money_left_so_far - other_monthly_costs);
 	}
 
 	if (vm.count("list")) {
 		std::vector<Person> everyone = input_family.get_everyone();
 		for (Person& person : everyone) {
 			printf("-----------------------\n");
-			printf("%s, %s:\n", person.get_name().c_str(), person.is_parent() ? "parent" : "child");
+			printf("%s, %s:\n", (person.get_name() + " " + input_family.get_name()).c_str(), person.is_parent() ? "parent" : "child");
 			printf("Age: %lf\n", person.get_age());
 			printf("%s: %s\n", person.is_parent() ? "Job" : "Hobby", person.get_activity().get_name().c_str());
 			printf("%s: %lf€\n", person.is_parent() ? "Salary" : "Monthly cost", std::fabs(person.get_activity().get_flow()));
-			if (!person.is_parent())
+			if (!person.is_parent()) {
 				printf("One time cost: %lf\n", person.get_activity().get_one_time());
+				continue;
+			}
+
+			double income = person.get_activity().get_flow();
+
+			if (income < 0) 
+				continue;
+
+			TaxTable tax_table = input_family.get_tax_table();
+			Municipality municipality = input_family.get_municipality();
+			Religion religion = input_family.get_religion();
+
+			double municipality_tax_rate = municipality.get_income_tax_percent();
+			double religion_tax_rate = religion == EVANGELICAL_LUTHERAN ? municipality.get_evangelical_lutheran_tax_percent() : religion == ORTHODOX ? municipality.get_orthodox_tax_percent() : 0;
+			std::tuple<bool, double, double> tax_row = tax_table.get_national_tax_rate(income*12);
+			double employment_pension_insurance_rate = tax_table.get_employment_pension_insurance_rate(person.get_age());
+			double unemployment_insurance_rate = tax_table.get_unemployment_insurance_rate();
+
+			double municipality_tax_deduction = income * municipality_tax_rate;
+			double religion_tax_deduction = income * religion_tax_rate;
+			double national_tax_deduction = income * std::get<2>(tax_row);
+			if (std::get<0>(tax_row))
+				national_tax_deduction += std::get<1>(tax_row);
+			double employment_pension_insurance_deduction = income * employment_pension_insurance_rate;
+			double unemployment_insurance_deduction = income * unemployment_insurance_rate;
+
+			printf("Municipality Tax: %lf%, %lf€\n", municipality_tax_rate * 100, municipality_tax_deduction);
+			printf("Religion Tax: %lf%, %lf€\n", religion_tax_rate * 100, religion_tax_deduction);
+			printf("National Tax: %lf%, thing %lf€, %lf€\n", std::get<2>(tax_row) * 100, std::get<0>(tax_row), national_tax_deduction);
+			printf("Employment Pension Insurance: %lf%, %lf€\n", employment_pension_insurance_rate * 100, employment_pension_insurance_deduction);
+			printf("Unemplyment Insurance: %lf%, %lf€\n", unemployment_insurance_rate * 100, unemployment_insurance_deduction);
+
+			double total_deductions = municipality_tax_deduction + religion_tax_deduction + national_tax_deduction + employment_pension_insurance_deduction + unemployment_insurance_deduction;
+
+			printf("Total After Deductions: %lf€ - %lf€ = %lf€\n", income, total_deductions, income - total_deductions);
+
+
 			std::cout << std::endl;
 		}
 	}

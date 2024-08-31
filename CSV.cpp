@@ -58,3 +58,22 @@ std::vector<std::vector<std::string>> CSV::load_csv(fs::path filepath) {
 
 	return result;
 }
+
+void CSV::write_csv(fs::path filepath, std::vector<std::vector<std::string>> data) {
+	std::ofstream file(filepath);
+
+	if (!file){
+		std::cerr << "Failed to open file!\n";
+		return;
+	}
+
+	for (std::vector<std::string>& row : data) {
+		for (unsigned int i = 0; i < row.size(); ++i) {
+			file << row[i].c_str();
+			if (i != row.size() - 1) {
+				file << ",";
+			}
+		}
+		file << std::endl;
+	}
+}

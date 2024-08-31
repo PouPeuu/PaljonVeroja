@@ -21,7 +21,8 @@ int main(int argc, char *argv[]) {
 		("hobbies,H", po::value<std::string>(), "hobbies file")
 		("jobs,j", po::value<std::string>(), "jobs file")
 		("municipalities,m", po::value<std::string>(), "municipalities file")
-		("taxtable,t", po::value<std::string>(), "tax table file");
+		("taxtable,t", po::value<std::string>(), "tax table file")
+		("csv,c", po::value<std::string>(), "CSV file to write people to");
 
 	po::variables_map vm;
 	po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -250,7 +251,7 @@ int main(int argc, char *argv[]) {
 			religion == EVANGELICAL_LUTHERAN ? municipality.get_evangelical_lutheran_tax_percent() : 
 			religion == ORTHODOX ? municipality.get_orthodox_tax_percent() : 
 			0;
-			
+
 			std::tuple<bool, double, double> tax_row = tax_table.get_national_tax_rate(income*12);
 			double employment_pension_insurance_rate = tax_table.get_employment_pension_insurance_rate(person.get_age());
 			double unemployment_insurance_rate = tax_table.get_unemployment_insurance_rate();
@@ -281,6 +282,22 @@ int main(int argc, char *argv[]) {
 
 			std::cout << std::endl;
 		}
+	}
+
+	if (vm.count("csv")) {
+		std::vector<std::vector<std::string>> data;
+		data.push_back({"Name", "Age", "Activity", "Flow", "One time"});
+		for (Person& person : input_family.get_everyone()) {
+			std::vector<std::string> row;
+			row.push_back(person.get_name());
+			row.push_back(std::to_string(person.get_age()));
+			row.push_back(person.get_activity().get_name());
+			row.push_back(std::to_string(person.get_activity().get_flow()));
+			row.push_back(std::to_string(person.get_activity().get_one_time()));
+			data.push_back(row);
+		}
+
+		CSV::write_csv(vm["csv"].as<std::string>(), data);
 	}
 
 	return 0;
